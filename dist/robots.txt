@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://yourdomain.cn/sitemap-index.xml
