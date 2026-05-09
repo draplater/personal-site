@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="XML Demo — Web Software Technology 2015">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech/homework">← 作业列表</a> · Unit 9</p>
+    <h1>XML — Recipe Book (cook.xml)</h1>
+
+    <h2>cook.xml</h2>
+    <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;font-size:0.8rem;line-height:1.4;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-stylesheet type="text/xsl" href="cook.xsl"?&gt;
+&lt;cookbook xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="cook.xsd"&gt;
+  &lt;recipe name="鸡丝沙拉"&gt;
+    &lt;ingredient amount="1" unit="个"&gt;鸡胸肉&lt;/ingredient&gt;
+    &lt;ingredient amount="1" unit="个"&gt;柠檬&lt;/ingredient&gt;
+    &lt;ingredient amount="2" unit="片"&gt;生菜&lt;/ingredient&gt;
+    &lt;image src="chicken.jpg"/&gt;
+    &lt;steps&gt;
+      &lt;step number="1"&gt;将鸡胸肉煮熟切丝。&lt;/step&gt;
+      &lt;step number="2"&gt;柠檬挤汁。&lt;/step&gt;
+      &lt;step number="3"&gt;生菜切丝，与鸡丝、柠檬汁拌匀。&lt;/step&gt;
+    &lt;/steps&gt;
+  &lt;/recipe&gt;
+  &lt;recipe name="焦糖布丁"&gt;
+    &lt;ingredient amount="2" unit="个"&gt;鸡蛋&lt;/ingredient&gt;
+    &lt;ingredient amount="200" unit="ml"&gt;牛奶&lt;/ingredient&gt;
+    &lt;ingredient amount="30" unit="g"&gt;白糖&lt;/ingredient&gt;
+    &lt;image src="custard.jpg"/&gt;
+    &lt;steps&gt;
+      &lt;step number="1"&gt;鸡蛋打散加入牛奶搅匀。&lt;/step&gt;
+      &lt;step number="2"&gt;加入白糖搅拌至融化。&lt;/step&gt;
+      &lt;step number="3"&gt;隔水蒸 15 分钟至凝固。&lt;/step&gt;
+    &lt;/steps&gt;
+  &lt;/recipe&gt;
+&lt;/cookbook&gt;</pre>
+
+    <h2>cook.xsd (Schema)</h2>
+    <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;font-size:0.8rem;line-height:1.4;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;xs:element name="cookbook"&gt;
+    &lt;xs:complexType&gt;
+      &lt;xs:sequence&gt;
+        &lt;xs:element name="recipe" maxOccurs="unbounded"&gt;
+          &lt;xs:complexType&gt;
+            &lt;xs:sequence&gt;
+              &lt;xs:element name="ingredient" type="xs:string" maxOccurs="unbounded"/&gt;
+              &lt;xs:element name="image"&gt;
+                &lt;xs:complexType&gt;
+                  &lt;xs:attribute name="src" type="xs:string"/&gt;
+                &lt;/xs:complexType&gt;
+              &lt;/xs:element&gt;
+              &lt;xs:element name="steps"&gt;
+                &lt;xs:complexType&gt;
+                  &lt;xs:sequence&gt;
+                    &lt;xs:element name="step" maxOccurs="unbounded"&gt;
+                      &lt;xs:complexType&gt;
+                        &lt;xs:simpleContent&gt;
+                          &lt;xs:extension base="xs:string"&gt;
+                            &lt;xs:attribute name="number" type="xs:integer"/&gt;
+                          &lt;/xs:extension&gt;
+                        &lt;/xs:simpleContent&gt;
+                      &lt;/xs:complexType&gt;
+                    &lt;/xs:element&gt;
+                  &lt;/xs:sequence&gt;
+                &lt;/xs:complexType&gt;
+              &lt;/xs:element&gt;
+            &lt;/xs:sequence&gt;
+            &lt;xs:attribute name="name" type="xs:string"/&gt;
+          &lt;/xs:complexType&gt;
+        &lt;/xs:element&gt;
+      &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+  &lt;/xs:element&gt;
+&lt;/xs:schema&gt;</pre>
+
+    <h2>cook.xsl (Transformation)</h2>
+    <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;font-size:0.8rem;line-height:1.4;">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"&gt;
+  &lt;xsl:template match="/"&gt;
+    &lt;html&gt;&lt;body&gt;
+      &lt;xsl:for-each select="cookbook/recipe"&gt;
+        &lt;h1&gt;&lt;xsl:value-of select="@name"/&gt;&lt;/h1&gt;
+        &lt;xsl:for-each select="ingredient"&gt;
+          &lt;p&gt;&lt;xsl:value-of select="."/&gt;&lt;/p&gt;
+        &lt;/xsl:for-each&gt;
+        &lt;img&gt;
+          &lt;xsl:attribute name="src"&gt;
+            &lt;xsl:value-of select="image/@src"/&gt;
+          &lt;/xsl:attribute&gt;
+        &lt;/img&gt;
+        &lt;ol&gt;
+          &lt;xsl:for-each select="steps/step"&gt;
+            &lt;li&gt;&lt;xsl:value-of select="."/&gt;&lt;/li&gt;
+          &lt;/xsl:for-each&gt;
+        &lt;/ol&gt;
+      &lt;/xsl:for-each&gt;
+    &lt;/body&gt;&lt;/html&gt;
+  &lt;/xsl:template&gt;
+&lt;/xsl:stylesheet&gt;</pre>
+  </div>
+
+</BaseLayout>

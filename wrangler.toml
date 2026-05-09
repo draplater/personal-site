@@ -1,0 +1,9 @@
+name = "personal-site"
+compatibility_date = "2026-05-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
+
+[env.production]
+routes = [
+  { pattern = "yourdomain.cn", custom_domain = true }
+]

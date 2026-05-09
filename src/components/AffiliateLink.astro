@@ -1,0 +1,75 @@
+<!-- @component 联盟链接（京东/淘宝）
+  用法：
+    <AffiliateLink url="https://item.jd.com/xxxx.html" label="去购买" />
+    <AffiliateLink url="https://s.click.taobao.com/xxxx" platform="taobao" label="查看详情" />
+
+  说明：JD 链接可用自己的联盟 ID 替换，TB 用淘宝客去 s.click.taobao.com 取短链
+-->
+---
+export interface Props {
+  url: string
+  label?: string
+  platform?: 'jd' | 'taobao' | 'other'
+  className?: string
+}
+
+const { url, label = '去看看 →', platform = 'jd', className = '' } = Astro.props
+
+const badgeMap: Record<string, string> = {
+  jd: '京东',
+  taobao: '淘宝',
+  other: '推荐',
+}
+const colorMap: Record<string, string> = {
+  jd: '#e4393c',
+  taobao: '#ff6a00',
+  other: '#666',
+}
+---
+
+<a
+  href={url}
+  target="_blank"
+  rel="nofollow sponsored noopener"
+  class={`affiliate-link ${className}`}
+>
+  <span class="badge" style={`background-color: ${colorMap[platform] || colorMap.other}`}>
+    {badgeMap[platform] || '广告'}
+  </span>
+  <span class="label">{label}</span>
+  <span class="arrow">↗</span>
+</a>
+
+<style is:global>
+  .affiliate-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    margin: 0.25rem 0;
+  }
+  .affiliate-link:hover {
+    background: #eee;
+    border-color: #ccc;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .affiliate-link .badge {
+    font-size: 0.75rem;
+    color: #fff;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .affiliate-link .arrow {
+    font-size: 0.85rem;
+    opacity: 0.5;
+  }
+</style>

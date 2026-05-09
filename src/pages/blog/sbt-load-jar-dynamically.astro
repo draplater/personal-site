@@ -1,0 +1,204 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import AdSense from '../../components/AdSense.astro'
+
+const code1 = `addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.3")`
+const code2 = `sbt assembly`
+const code3 = `unmanagedBase <<= baseDirectory { base => base / "lib" }`
+const code4 = `assemblyExcludedJars in assembly := {
+  val cp = (fullClasspath in assembly).value
+  val excludesJar = Set("swt.jar")
+  cp filter { jar => excludesJar.contains(jar.data.getName) }
+}`
+const code5 = `mainClass in assembly := Some("org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader")`
+const code6 = `packageOptions in assembly += ManifestAttributes(
+  ("Rsrc-Main-Class", "包名.你自己主类的名字"))`
+const code7 = `packageOptions in assembly += ManifestAttributes(
+  ("Rsrc-Class-Path", "./"))`
+const code8 = `package xxx
+
+import java.lang.reflect.Method
+import java.net.URL
+import java.net.URLClassLoader
+
+class LoadSWT { }
+
+object LoadSWT {
+  def main(args: Array[String]) {
+    try {
+      Class.forName("org.eclipse.swt.SWT")
+    } catch {
+      case e: ClassNotFoundException => loadSWT()
+    }
+    真正的主类.main(args)
+  }
+
+  def loadSWT(): Unit = {
+    val osName = System.getProperty("os.name").toLowerCase
+    val osArch = System.getProperty("os.arch").toLowerCase
+
+    val swtFileNameOsPart = if (osName.contains("win")) "win32"
+    else if (osName.contains("mac")) "macosx"
+    else if (osName.contains("linux") || osName.contains("nix")) "linux_gtk"
+    else ""
+
+    val swtFileNameArchPart = if (osArch.contains("64")) "x64" else "x86"
+    val swtFileName = s"swt_\${swtFileNameOsPart}_\${swtFileNameArchPart}.jar"
+
+    try {
+      val classLoader: URLClassLoader =
+        getClass.getClassLoader.asInstanceOf[URLClassLoader]
+      val addUrlMethod: Method =
+        classOf[URLClassLoader].getDeclaredMethod("addURL", classOf[URL])
+      addUrlMethod.setAccessible(true)
+      val fileURL = new URL(s"rsrc:jar/\${swtFileName}")
+      addUrlMethod.invoke(classLoader, fileURL)
+    } catch {
+      case e: Exception =>
+        throw new RuntimeException(
+          s"Unable to add the SWT jar to the class path: \${swtFileName}", e)
+    }
+  }
+}`
+const code9 = `package xxx
+
+import org.eclipse.swt.SWT
+import org.eclipse.swt.browser.Browser
+import org.eclipse.swt.layout.FillLayout
+import org.eclipse.swt.widgets.{Display, Shell}
+
+/**
+  * Created by draplater on 16-7-20.
+  */
+object WebBrowserTest {
+  def main(args: Array[String]): Unit = {
+    val display = new Display
+    val shell = new Shell(display)
+    shell.setLayout(new FillLayout)
+    val browser = new Browser(shell, SWT.NONE)
+    browser.setUrl("https://www.google.com/")
+    shell.open()
+    while (!shell.isDisposed) {
+      if (!display.readAndDispatch())
+        display.sleep()
+    }
+    display.dispose()
+  }
+}`
+---
+
+<BaseLayout title="Scala、SBT构建工具下，实现动态加载JAR文件 — 飒飒的个人站">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;">2016-07-21 · 技术 · scala / sbt</p>
+    <h1>Scala、SBT 构建工具下，实现动态加载 JAR 文件</h1>
+
+    <h2>背景</h2>
+    <p>
+      Java 中 AWT、Swing 等组件提供了许多图形界面控件，用于交互确实是一种不错的选择。
+      不过现在已经 2016 年了，HTML、CSS 等前端技术快速发展，可以实现很棒的效果。
+      而且 HTML、CSS 都是声明式编程，可以以非常简单、直接的方式进行布局。
+      在移动端已经实现了 Hybrid App，既能跨平台快速部署，又能充分利用本地的接口。
+    </p>
+    <p>
+      理论上来说，只要有浏览器控件，就能构造一个 Hybrid App。
+      或许是因为每个平台特性不统一的缘故，Java 并没有提供这样的接口。
+      Eclipse 基金会有一个 SWT 项目，是一个带有许多图形界面控件的框架。
+      其中有一个浏览器控件，不仅能够显示网页，还可以通过 JavaScript 和 Java 层通讯，
+      用来做 WebApp 是一个很好的选择。
+    </p>
+    <p>
+      但是 SWT 有一个缺点：跨平台性不好，每个平台单独提供一个 jar 文件。
+      这会给我们带来许多麻烦。有时我们会以单个 jar 的方式发布程序。
+      如果要用到第三方 jar 文件，会把别的 jar 解包到自己的 jar 里，
+      合并成一个"肥"jar 文件一起发布。如果项目里加入了 SWT，就会很讨厌：
+      SWT 每个平台有不同的 jar 文件，这意味着你也要对每个平台发布不同的"肥"jar 文件。
+      常见平台有 6 个：Windows、Linux、OS X 以及它们的 64 位版本。
+      发布 6 个文件让用户选择，当然不如只发布一个文件方便。
+    </p>
+    <p>
+      这种情况也是可以解决的。Eclipse 基金会也发布过一个 JAR in JAR loader。
+      使用这个 loader 的时候，可以把第三方 jar 直接放在 jar 里面（不用解包），
+      且可以在运行时动态改变要使用的 jar 文件。
+      一种很自然的想法是，将各个平台的 SWT 都放到"肥"jar 文件里，
+      程序启动的时候根据当前环境选择一个 SWT 文件载入。
+    </p>
+
+    <h2>配置 <code>sbt-assembly</code> 生成"肥"jar 文件</h2>
+    <p>
+      SBT 生成的 jar 文件都是独立的 jar 文件（"瘦"jar 文件），不包含依赖的 jar 包。
+      一般用 <code>sbt-assembly</code> 模块生成"肥"jar 文件。
+    </p>
+    <p>项目已经配置好 sbt 的情况下，安装 <code>sbt-assembly</code> 模块的方法如下：</p>
+    <p>
+      <code>project</code> 文件夹下，建立一个 <code>assembly.sbt</code> 文件，内容为（版本号可以改成最新的）：
+    </p>
+    <pre><code>{code1}</code></pre>
+    <p>执行下列命令即可生成"肥"jar 文件：</p>
+    <pre><code>{code2}</code></pre>
+
+    <h2>下载并放入 SWT</h2>
+    <ul>
+      <li>
+        假设 swt 已经配置好，且自己管理的 jar 依赖放在 <code>lib</code> 目录下，并配置好：
+      </li>
+    </ul>
+    <pre><code>{code3}</code></pre>
+    <p>
+      可以到
+      <a href="https://www.eclipse.org/swt/" target="_blank">Eclipse SWT 主页</a>
+      下载每个平台的 swt，假设放入了 <code>src/main/resources/jar/</code> 文件夹里。
+      并命名为 <code>swt_linux_gtk_x86.jar</code>、<code>swt_macosx_x86.jar</code>、
+      <code>swt_win32_x86.jar</code> 等不同平台的版本。
+    </p>
+    <p>
+      为了编译时使用 swt，也在 <code>lib</code> 文件夹下放一个当前平台的 swt 文件。假设命名成 <code>swt.jar</code>。
+    </p>
+    <p>
+      配置 <code>sbt-assembly</code>，排除掉 <code>swt.jar</code>，因为在"肥"jar 文件中我们将手动加载 swt。
+      在 <code>build.sbt</code> 中加入：
+    </p>
+    <pre><code>{code4}</code></pre>
+
+    <h2>配置 JAR in JAR Loader</h2>
+    <p>
+      几篇参考资料中都不会提到要配置 JAR in JAR Loader。
+      因为他们的项目都是使用 Eclipse 管理的 Java 项目，会自动配置好 JAR in JAR Loader。
+      这一步是非常必要的，我们的 SBT 项目需要自行配置。
+    </p>
+    <p>
+      在 Eclipse 的 <code>plugin</code> 目录下找到一个 <code>jar-in-jar-loader.zip</code> 文件，
+      改名成 <code>jar-in-jar-loader.jar</code>，放在 SBT 项目的 <code>lib</code> 目录下。
+    </p>
+    <p>在组装"肥"jar 时，将入口（主类）改为 JAR in JAR Loader。即在 <code>build.sbt</code> 中加入：</p>
+    <pre><code>{code5}</code></pre>
+    <p>
+      在 <code>build.sbt</code> 里，将真正的程序入口（你自己的主类）指定成 <code>Rsrc-Main-Class</code>：
+    </p>
+    <pre><code>{code6}</code></pre>
+    <p>在 <code>build.sbt</code> 里，加入 <code>Rsrc-Class-Path</code>：</p>
+    <pre><code>{code7}</code></pre>
+    <p>在这里测试一下，组装后的"肥"JAR 文件应该能正常运行。</p>
+
+    <h2>动态加载 JAR 文件</h2>
+    <p>
+      JAR 文件需要在自己的类被加载之前载入，否则在 import 阶段就会出错。
+      所以需要专门写一个类作为入口来加载 JAR 文件。假设这个类的名字叫 <code>LoadSWT</code>。
+      内容为：
+    </p>
+    <pre><code>{code8}</code></pre>
+    <p>
+      然后在 <code>build.sbt</code> 中，将 <code>Rsrc-Main-Class</code> 改成 <code>包名.LoadSWT</code>。
+      这样就可以在进入程序之前加载好 SWT 了。
+    </p>
+
+    <h2>SWT 浏览器样例</h2>
+    <p>你可以写一个 SWT 浏览器测试一下，参考如下：</p>
+    <pre><code>{code9}</code></pre>
+  </div>
+
+  <div class="sticker block">
+    <AdSense slot="5678901234" format="rectangle" />
+  </div>
+
+</BaseLayout>

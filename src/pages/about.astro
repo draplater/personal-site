@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import AdSense from '../components/AdSense.astro'
+---
+
+<BaseLayout title="关于 — 飒飒的个人站">
+
+  <div class="article block">
+    <h1>👤 关于</h1>
+
+    <p>
+      一个喜欢折腾的数字原住民。INTP 内核 + Jobs 审美，2007-2013 年混迹化学吧/嘻哈吧的考古专家，
+      现在做价值投资和可转债条款博弈，偶尔写写 ESP32 固件、玩玩 Android 逆向。
+    </p>
+
+    <p>
+      这个站主要写：
+    </p>
+
+    <ul>
+      <li>技术折腾记录（建站、ADB、自部署）</li>
+      <li>投资思考和可转债研究</li>
+      <li>生活随想和读书笔记</li>
+    </ul>
+
+    <h2>📮 联系方式</h2>
+    <p>GitHub: <a href="https://github.com/draplater" target="_blank">@draplater</a></p>
+  </div>
+
+  <!-- 广告位 -->
+  <div class="sticker block">
+    <AdSense slot="3456789012" format="rectangle" />
+  </div>
+
+</BaseLayout>

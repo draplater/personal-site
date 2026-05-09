@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Statusful vs. Statusless — Web Software Technology 2015">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech/homework">← 作业列表</a> · Unit 1</p>
+    <h1>Statusful vs. Statusless: Pros and Cons</h1>
+    <p style="text-align:center;"><img src="/webtech/images/ac-adapter.png" height="300" alt="network"></p>
+    <p><strong>Good points of statusless:</strong></p>
+    <ol>
+      <li>A statusless protocol is more simple. Considering of statusful protocol, we must define status and the conversion between different status. However, the statusless HTTP protocol can be described with a simple Request-Response model. It's easily achievable.</li>
+      <li>Using a statusless protocol, we can save hardware resources of the server, such as tcp ports and memory space, because we don't need to store the state of each connection.</li>
+    </ol>
+    <p><strong>Bad points:</strong></p>
+    <ol>
+      <li>The client and server have no "memory" and cannot distinguish each requests. So the client and server must use Cookies to keep a session.</li>
+      <li>The server cannot send message to client initiatively. Taking online chatting as an example. In order to check new message, one must send a request to the server periodically, instead of just waiting for it in the connection.</li>
+    </ol>
+    <p>Some statusful technology, such as WebSocket is also designed to meet corresponding demand.</p>
+    <p>If the browser close the connection right after the document is transfered, it can only know how many people open the page, not including how long one read it and whether one is reading it now. If the website manager do want to know the statistics, he can use different technology. For example, he can use javascript to send back data periodically.</p>
+    <p><a href="/webtech/homework/unit1-3">→ Continue to next homework in this unit</a></p>
+  </div>
+
+</BaseLayout>

@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import AdSense from '../../components/AdSense.astro'
+import AffiliateLink from '../../components/AffiliateLink.astro'
+---
+
+<BaseLayout title="Hello World — 我又回来写博客了">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;">2026-05-09 · 技术</p>
+
+    <h1>👋 Hello World — 我又回来写博客了</h1>
+
+    <p>
+      从 2010 年混贴吧到 2026 年的独立博客，中间隔了十几年的信息熵增。
+      现在用 CF Pages + Astro 重新搭了个站，顺便研究怎么在零成本的架构上插广告。
+    </p>
+
+    <p>
+      这个站部署在 Cloudflare Pages，零服务器成本，无限带宽。
+      有兴趣可以参考项目模板 <a href="https://github.com/draplater/personal-site">GitHub</a>。
+    </p>
+
+    <!-- 文章内广告 -->
+    <AdSense slot="4567890123" format="auto" />
+
+    <h2>技术栈</h2>
+    <ul>
+      <li><strong>框架</strong>：Astro 4（零 JS 体积，完美适配 CF Pages）</li>
+      <li><strong>部署</strong>：Cloudflare Pages</li>
+      <li><strong>广告</strong>：Google AdSense</li>
+      <li><strong>分析</strong>：Cloudflare Web Analytics（免费）</li>
+      <li><strong>源码</strong>：GitHub</li>
+    </ul>
+
+    <h2>好用的工具推荐</h2>
+    <p>搭建这个站用到的工具：</p>
+    <ul>
+      <li>
+        Astro —
+        <AffiliateLink
+          url="https://www.amazon.com/dp/B0BTM7QY9K"
+          label="推荐的一本前端书"
+          platform="other"
+        />
+      </li>
+      <li>
+        机械键盘写代码更爽 —
+        <AffiliateLink
+          url="https://item.jd.com/100000000000.html"
+          label="看看京东上的键盘"
+          platform="jd"
+        />
+      </li>
+    </ul>
+
+    <p style="margin-top:2rem;padding-top:1rem;border-top:1px solid #eee;color:#999;font-size:0.85rem;">
+      <em>本文包含联盟链接，如果你通过链接购买，我可能会获得少量佣金，不影响你的购买价格。</em>
+    </p>
+  </div>
+
+  <!-- 文章结尾广告 -->
+  <div class="sticker block">
+    <AdSense slot="5678901234" format="rectangle" />
+  </div>
+
+</BaseLayout>

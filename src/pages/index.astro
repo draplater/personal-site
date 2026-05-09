@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import AdSense from '../components/AdSense.astro'
+---
+
+<BaseLayout title="首页 — 飒飒的个人站" description="技术、生活、思考，关于一个数字原住民的日常">
+
+  <div class="article block">
+    <h1 style="text-align:center;">🚀 飒飒的个人站</h1>
+    <p style="color:#666;text-align:center;margin:0.5rem 0 0;">
+      技术 · 投资 · 生活 · 碎碎念
+    </p>
+  </div>
+
+  <!-- 广告位：首页横幅 -->
+  <div class="sticker block" style="text-align:center;">
+    <AdSense slot="1234567890" format="horizontal" />
+  </div>
+
+  <div class="sticker block">
+    <h2>📝 最近更新</h2>
+    <ul>
+      <li><a href="/blog/base16384">仿造base64写一个base16384</a> (2013)</li>
+      <li><a href="/blog/sbt-load-jar-dynamically">Scala、SBT构建工具下，实现动态加载JAR文件</a> (2016)</li>
+      <li><a href="/blog/hello-world">Hello World — 我又回来写博客了</a></li>
+    </ul>
+  </div>
+
+  <!-- 广告位：文章列表中间 -->
+  <div class="sticker block">
+    <AdSense slot="2345678901" format="auto" />
+  </div>
+
+  <div class="sticker block">
+    <h2>🏷️ 分类</h2>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+      <span style="background:#e0e7ff;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.9rem;">技术</span>
+      <span style="background:#fce7f3;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.9rem;">投资</span>
+      <span style="background:#d1fae5;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.9rem;">生活</span>
+      <span style="background:#fef3c7;padding:0.25rem 0.75rem;border-radius:999px;font-size:0.9rem;">阅读</span>
+    </div>
+  </div>
+</BaseLayout>

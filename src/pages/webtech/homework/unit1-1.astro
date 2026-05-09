@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="NPAPI — Web Software Technology 2015">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech/homework">← 作业列表</a> · Unit 1</p>
+    <h1>Something you must know about NPAPI</h1>
+    <p style="text-align:center;"><img src="/webtech/images/netscape.jpg" height="300" alt="Netscape"></p>
+    <p>Netscape Plugin is often called NPAPI (Netscape Plugin Application Programming Interface). It's an extension for browsers.</p>
+    <p>A new MIME is defined with a plugin. When browser encounters with this new MIME, which cannot be handled by it natively, it turns the content to the plugin.</p>
+    <p>I think the plugin belongs to distributed object technologies. The most important reason is that the plugin interplay with the browser well, though they may be written in different languages and time period. Thus, NPAPI provides an interface between browser and other application.</p>
+    <p>Taking Adobe Flash Player as an example. The browser cannot process the flash format <code>application/x-shockwave-flash</code> in default. When the flash player installed, the browser can call it to decode and render the flash video, despite the fact that the browser and the flash player is designed by different company and maybe different language.</p>
+    <p><a href="/webtech/homework/unit1-2">→ Continue to next homework in this unit</a></p>
+  </div>
+
+</BaseLayout>

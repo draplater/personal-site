@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+const sqlCode = `SELECT guest.Name 
+FROM guest, party, participate ON participate
+    LEFT JOIN party ON participate.Party_ID = party.Party_ID
+    LEFT JOIN guest ON participate.Guest_ID = guest.guest_ID
+WHERE party.Place = 'Peking University';`
+
+const phpCode = `$row = mysql_fetch_array($result);
+$keys = array_keys($row);
+foreach ($keys as $key) { print key; }`
+
+const phpCode2 = `$conn = mysqli_connect(...);
+$conn->prepare(...);
+mysqli_insert_id($conn);
+$conn->real_escape_string(...);`
+
+const tomcatCode = `cd ~
+cp /home/2015/y2015g133/apache-tomcat-8.0.28.tar.gz ~
+tar zxvf apache-tomcat-8.0.28.tar.gz
+mv apache-tomcat-8.0.28 tomcat
+
+# 配置 server.xml，改 8080 端口
+tomcat/bin/startup.sh
+
+# httpd.conf 开 mod_proxy mod_proxy_ajp
+# 加 ProxyPass /tomcat ajp://localhost:$AJP_PORT`
+---
+
+<BaseLayout title="Homework — Web Software Technology 2015" description="陈宇飞 · 北京大学 · WST 2015 · 课程作业总览">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech">← 返回课程主页</a></p>
+    <h1>📋 Homework — Web Software Technology 2015</h1>
+    <p style="color:#666;">
+      课程编号 04831170 · 北京大学信息科学技术学院 · 授课：张童 zt@pku.edu.cn
+    </p>
+  </div>
+
+  <!-- Unit 1 -->
+  <div class="sticker block" id="unit1">
+    <h2>Unit 1</h2>
+    <p><strong>Homework 1:</strong> For the three categories of web software technology we've just defined, you are asked to find out which category so-called &ldquo;Netscape plug-in&rdquo; technology belongs to. Please describe the basic idea of the technology, and give your reasoning on its position in the technology categories.</p>
+    <p><a href="/webtech/homework/unit1-1">→ Show my answer</a></p>
+    <hr>
+    <p><strong>Homework 2:</strong> In a normal intercommunication between Web browser and Web Server, Web Server closes the network communication right after it sends back the document requested by the browser. Think about this <b>statusless</b> character of World Wide Web. Give some good points and bad points of it. Can a web server know exactly how many browsers are reading its document?</p>
+    <p><a href="/webtech/homework/unit1-2">→ Show my answer</a></p>
+    <hr>
+    <p><strong>Homework 3:</strong> Use some Web search engine to search keywords regarding your interest (even your own name to find out how famous you are in this Web World).</p>
+    <p><a href="/webtech/homework/unit1-3">→ Show my answer</a></p>
+  </div>
+
+  <!-- Unit 2 -->
+  <div class="sticker block" id="unit2">
+    <h2>Unit 2</h2>
+    <p><strong>Homework 1:</strong> Read the text book, try to remember all HTML tags that appear. Create HTML pages <strong>manually</strong>. On your website, I'd like to see:</p>
+    <ul>
+      <li>The homepage of your website, clearly indicating the location of your homework.</li>
+      <li>A set of pages comprising: paragraphs, line breaks, headings, images, hypertext links, links targeting within the same page, ordered list, table with rowspan and colspan, frameset, and an HTML comment.</li>
+      <li>One photo linked to your personal blog.</li>
+    </ul>
+    <p><a href="/webtech/homework/unit2-1">→ Show my answer</a></p>
+    <hr>
+    <p><strong>Homework 2:</strong> Try to make your pages pass HTML5 validation through the W3C Markup Validator.</p>
+    <p>Document checking completed. No errors or warnings to show.</p>
+  </div>
+
+  <!-- Unit 3 -->
+  <div class="sticker block" id="unit3">
+    <h2>Unit 3</h2>
+    <p><a href="/webtech/homework/css">CSS 样式练习</a></p>
+    <p><a href="/webtech/homework/survey">Survey 调查问卷</a></p>
+  </div>
+
+  <!-- Unit 4 -->
+  <div class="sticker block" id="unit4">
+    <h2>Unit 4</h2>
+    <p><strong>Homework 1:</strong> Answer the three questions asked in the course.</p>
+    <ol>
+      <li>Give the SELECT command for <em>Who will go to the party held in Peking University?</em>
+        <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;"><code>{sqlCode}</code></pre>
+      </li>
+      <li>Figure out a way to obtain the column labels returned by <em>mysql_fetch_array</em>.
+        <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;"><code>{phpCode}</code></pre>
+      </li>
+      <li>Difference between CGI and PHP: CGI 是通用网关接口（协议），PHP 是 Web 开发脚本语言。PHP 可以作为 CGI 应用。CGI 可以用 PHP 以外的各种语言编写。</li>
+    </ol>
+    <hr>
+    <p><strong>Homework 2:</strong> Set up PHP for your Apache and test it. Done ✓</p>
+    <hr>
+    <p><strong>Homework 3:</strong> Transform the guest book into a Database version.</p>
+    <p><a href="/webtech/homework/survey">→ Show my answer</a></p>
+    <hr>
+    <p><strong>Homework 4:</strong> Create party table and party_guest table. Done ✓</p>
+    <hr>
+    <p><strong>Homework 5 (optional):</strong> Prepared Statements and injection prevention.</p>
+    <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;"><code>{phpCode2}</code></pre>
+  </div>
+
+  <!-- Unit 5 -->
+  <div class="sticker block" id="unit5">
+    <h2>Unit 5</h2>
+    <p><strong>Homework 1:</strong> Java Servlet 演示</p>
+    <p>源码：<a href="/webtech/homework/java">Java 代码入口</a></p>
+    <hr>
+    <p><strong>Bonus:</strong> Tomcat + Apache 搭建指南</p>
+    <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;"><code>{tomcatCode}</code></pre>
+    <p>BookFace+ JSP 项目（数据课作业）：Username: test / Password: test</p>
+    <p><em>Tomcat crash very often. If you encounter 503, click button to restart.</em></p>
+  </div>
+
+  <!-- Unit 6 -->
+  <div class="sticker block" id="unit6">
+    <h2>Unit 6</h2>
+    <p><strong>Homework 0:</strong> JS Browser Sniffers</p>
+    <ol>
+      <li>Browser sniffing 用于判断访客浏览器，以便提供适配内容。</li>
+      <li>不同浏览器对 HTML/CSS/DOM 的解释不同，需要检测浏览器类型。</li>
+    </ol>
+    <hr>
+    <p><strong>Homework 1:</strong> JavaScript 示例（需 PHP 环境）</p>
+    <ol>
+      <li>hiThere.php</li>
+      <li>function.php</li>
+      <li>popups.php</li>
+      <li>objects.php</li>
+      <li>wizardForm.php</li>
+    </ol>
+  </div>
+
+  <!-- Unit 7&8 -->
+  <div class="sticker block" id="unit78">
+    <h2>Unit 7 &amp; 8</h2>
+    <p>Java Applet / Server Push 技术</p>
+    <p><a href="/webtech/homework/java">→ Java 代码入口</a></p>
+  </div>
+
+  <!-- Unit 9 -->
+  <div class="sticker block" id="unit9">
+    <h2>Unit 9 — XML</h2>
+    <ul>
+      <li><a href="/webtech/homework/cook-xml">cook.xml</a></li>
+    </ul>
+    <hr>
+    <p><strong>Tips from the student:</strong></p>
+    <ol>
+      <li>在 XSLT 中，用 <code>&lt;xsl:attribute&gt;</code> 标签指定 <code>&lt;img&gt;</code> 的 <code>src</code> 属性。</li>
+      <li>XSLT 必须严格遵守 XML 标准，否则会遇到空白页面且没有任何错误信息。</li>
+    </ol>
+  </div>
+
+  <div class="sticker block" style="text-align:center;color:#999;font-size:0.85rem;">
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="CC BY-NC" style="border-width:0" src="/webtech/images/88x31.png"></a><br>
+    For <a href="http://net.pku.edu.cn/~zt/wst/">Web Software Technology 2015</a>. Designed & coded by Chen Yufei.
+  </div>
+
+</BaseLayout>

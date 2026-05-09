@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="HTML Elements — Web Software Technology 2015">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech/homework">← 作业列表</a> · Unit 2</p>
+    <h1>HTML Elements Practice</h1>
+    <p style="text-align:center;"><img src="/webtech/images/edit-find-replace.png" alt="practice"></p>
+    <p>paragraphs</p>
+    <p>line breaks<br>line breaks</p>
+
+    <h1>headings h1</h1>
+    <h2>headings h2</h2>
+    <h3>headings h3</h3>
+    <h4>headings h4</h4>
+    <h5>headings h5</h5>
+    <h6>headings h6</h6>
+
+    <p>images <img src="/webtech/images/emblem-default.png" alt="true"></p>
+    <p><a href="http://www.baidu.com">hyper links</a></p>
+    <p><a href="#unit2">hypertext links that target within the same page</a></p>
+
+    <ol>
+      <li>ordered list</li>
+      <li>ordered list</li>
+      <li>ordered list</li>
+      <li>ordered list</li>
+    </ol>
+
+    <table style="border-collapse:collapse;border:1px solid green;">
+      <tr><th style="border:1px solid green;background:green;color:#fff;padding:4px;">table</th><th style="border:1px solid green;background:green;color:#fff;padding:4px;">table</th><th style="border:1px solid green;background:green;color:#fff;padding:4px;">table</th></tr>
+      <tr><td colspan="3" style="border:1px solid green;padding:4px;">colspan="3"</td></tr>
+      <tr><td rowspan="3" style="border:1px solid green;padding:4px;">rowspan="3"</td><td style="border:1px solid green;padding:4px;">padding</td><td style="border:1px solid green;padding:4px;">padding</td></tr>
+      <tr><td style="border:1px solid green;padding:4px;">padding</td><td style="border:1px solid green;padding:4px;">padding</td></tr>
+      <tr><td style="border:1px solid green;padding:4px;">padding</td><td style="border:1px solid green;padding:4px;">padding</td></tr>
+    </table>
+
+    <p>Frameset is deprecated in HTML, you can see it <a href="https://draplater.github.io/">here</a>.</p>
+    <p>View source to see HTML comments.</p>
+    <!-- HTML comment is here! -->
+    <p>Click the image to go to home page. <a href="/"><img src="/webtech/images/go-jump.png" alt="go"></a></p>
+  </div>
+
+</BaseLayout>

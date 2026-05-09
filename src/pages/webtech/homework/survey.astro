@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="Survey — Web Software Technology 2015">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech/homework">← 作业列表</a> · Unit 3/4</p>
+    <h1>Survey — 调查问卷</h1>
+
+    <p style="text-align:center;">
+      <img src="/webtech/images/dialog-warning.png" alt="survey">
+    </p>
+
+    <p>这是 Unit 3 和 Unit 4 的作业——一个带 MySQL 数据库的调查问卷系统。</p>
+    <p>原版为 PHP + MySQL + jQuery AJAX 实现，后端环境不再可用，以下是当时的功能描述：</p>
+
+    <ul>
+      <li>表单字段：姓名、年龄、性别、邮箱</li>
+      <li>数据通过 jQuery AJAX POST 提交</li>
+      <li>后端 PHP 存入 MySQL，用 Prepared Statement 防注入</li>
+      <li>可查看投票结果</li>
+    </ul>
+
+    <div style="background:#f0f0f0;padding:20px;border-radius:6px;max-width:500px;margin:0 auto;">
+      <form id="frmsurvey" style="width:100%;">
+        <p><label>Name</label> <input type="text" name="name" disabled style="width:60%;"></p>
+        <p><label>Age</label> <input type="number" name="age" disabled style="width:60%;"></p>
+        <p><label>Gender</label>
+          <select name="gender" disabled style="width:60%;">
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </p>
+        <p><label>Email</label> <input type="email" name="email" disabled style="width:60%;"></p>
+      </form>
+      <p style="text-align:center;color:#999;font-size:0.85rem;">（表单已禁用 — 原始系统需要 PHP 后端）</p>
+    </div>
+
+    <p style="margin-top:1rem;color:#999;font-size:0.9rem;">
+      <em>We've deployed a $1000 Intrusion Prevention System to stop hackers! Your IP address will be logged.</em>
+    </p>
+  </div>
+
+</BaseLayout>

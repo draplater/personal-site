@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+
+const helloCode = `public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, Web Software Technology 2015!");
+    }
+}`
+
+const sqCode = `import javax.swing.*;
+import java.awt.*;
+
+public class SquareAndCircle extends JPanel {
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.setColor(Color.RED);
+        g.fillRect(50, 50, 100, 100);
+        g.setColor(Color.BLUE);
+        g.fillOval(200, 50, 100, 100);
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame();
+        frame.add(new SquareAndCircle());
+        frame.setSize(400, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+    }
+}`
+---
+
+<BaseLayout title="Java — Web Software Technology 2015">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech/homework">← 作业列表</a> · Unit 5/7</p>
+    <h1>Java Servlet &amp; Applet</h1>
+
+    <p>Unit 5 和 Unit 7/8 的 Java 相关作业存档。</p>
+
+    <h2>HelloWorld.java</h2>
+    <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;"><code>{helloCode}</code></pre>
+
+    <h2>SquareAndCircle.java</h2>
+    <pre style="background:#f0f0f0;padding:10px;overflow-x:auto;"><code>{sqCode}</code></pre>
+
+    <h2>BookFace+ 项目</h2>
+    <p>一个 JSP/Servlet 项目，课程《数据库概论 101》作业。</p>
+    <p>技术栈：Tomcat 8 + JSP + JDBC + MySQL</p>
+  </div>
+
+</BaseLayout>

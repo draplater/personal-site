@@ -1,0 +1,23 @@
+---
+export interface Props {
+  slot: string
+  className?: string
+}
+
+const { slot, className = '' } = Astro.props
+---
+
+<div class={'ad-container ' + className}>
+  <ins
+    class="adsbygoogle"
+    data-ad-client="ca-pub-XXXXXXXXXXXXXX"
+    data-ad-slot={slot}
+    data-ad-format="auto"
+    data-full-width-responsive="true"
+  ></ins>
+</div>
+
+<script>
+  window.adsbygoogle = window.adsbygoogle || [];
+  (window.adsbygoogle).push({});
+</script>

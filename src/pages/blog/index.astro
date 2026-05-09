@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import AdSense from '../../components/AdSense.astro'
+---
+
+<BaseLayout title="文章 — 飒飒的个人站">
+
+  <div class="article block">
+    <h1>📄 文章</h1>
+
+    <ul style="list-style:none;padding:0;">
+      <li style="padding:1rem 0;border-bottom:1px solid #eee;">
+        <a href="/blog/base16384" style="font-size:1.1rem;font-weight:600;">仿造base64写一个base16384</a>
+        <p style="color:#666;font-size:0.85rem;margin-top:0.25rem;">2013-12-20 · 技术 · python</p>
+      </li>
+      <li style="padding:1rem 0;border-bottom:1px solid #eee;">
+        <a href="/blog/sbt-load-jar-dynamically" style="font-size:1.1rem;font-weight:600;">Scala、SBT构建工具下，实现动态加载JAR文件</a>
+        <p style="color:#666;font-size:0.85rem;margin-top:0.25rem;">2016-07-21 · 技术 · scala / sbt</p>
+      </li>
+      <li style="padding:1rem 0;border-bottom:1px solid #eee;">
+        <a href="/blog/hello-world" style="font-size:1.1rem;font-weight:600;">Hello World — 我又回来写博客了</a>
+        <p style="color:#666;font-size:0.85rem;margin-top:0.25rem;">2026-05-09 · 技术</p>
+      </li>
+    </ul>
+  </div>
+
+  <div class="sticker block">
+    <AdSense slot="6789012345" format="auto" />
+  </div>
+
+</BaseLayout>

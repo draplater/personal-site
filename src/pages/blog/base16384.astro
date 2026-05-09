@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import AdSense from '../../components/AdSense.astro'
+
+const encoderCode = `#! /usr/bin/python
+# Filename: base16384.py
+import sys
+import os
+import codecs
+if len(sys.argv) == 2:
+    stream = open(sys.argv[1])
+else:
+    stream = sys.stdin
+codelist = [ unichr(i) for i in range(0x4e00, 0x4e00+0x4000+1) ]
+if sys.stdout.encoding == None:
+    sys.stdout = codecs.getwriter("utf-8")(sys.stdout)
+s = [0,0,0,0]
+while 1:
+    buf = stream.read(7)
+    buf_size = len(buf)
+    if not buf:
+        break
+    if buf_size != 7:
+        buf+=chr(0)*(7-buf_size)
+    s[0] = ((ord(buf[0])<<6) % 16384) + (ord(buf[1])>>2)
+    s[1] = ((ord(buf[1])<<12) % 16384) + ((ord(buf[2])<<4) % 16384) + (ord(buf[3])>>4)
+    s[2] = ((ord(buf[3])<<10) % 16384) + ((ord(buf[4])<<2) % 16384) + (ord(buf[5])>>6)
+    s[3] = ((ord(buf[5])<<8) % 16384) + ord(buf[6])
+    for i in s:
+        sys.stdout.write(codelist[i])
+    sys.stdout.write(unichr(0xff0c)*(7-buf_size))`
+
+const decoderCode = `#! /usr/bin/python
+# Filename: base16384_decode.py
+import sys
+import os
+import codecs
+import StringIO
+if len(sys.argv) == 2:
+    stream = codecs.open(sys.argv[1], encoding='utf-8')
+else:
+    sys.stdin = codecs.getreader('utf-8')(sys.stdin)
+    stream = sys.stdin
+s = [-1,0,0,0,0,0,0]
+while 1:
+    buf = stream.read(4)
+    if buf[0] == unichr(0xff0c):
+        extralen = len(stream.read())+len(buf)
+        for i in s[0:7-extralen]:
+            sys.stdout.write(chr(i))
+        break
+    if s[0] != -1:
+        for i in s:
+            sys.stdout.write(chr(i))
+    buf = map(lambda x:ord(x)-0x4e00,buf)
+    s[0] = buf[0]>>6
+    s[1] = ((buf[0] % 64) << 2) + (buf[1]>>12)
+    s[2] = (buf[1] >> 4) % 256
+    s[3] = ((buf[1] % 16) << 4) + (buf[2]>>10)
+    s[4] = (buf[2] >> 2) % 256
+    s[5] = ((buf[2] % 4 ) << 6) + (buf[3]>>8)
+    s[6] = (buf[3]) % 256`
+---
+
+<BaseLayout title="仿造base64写一个base16384 — 飒飒的个人站">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;">2013-12-20 · 技术 · python</p>
+    <h1>仿造 base64 写一个 base16384</h1>
+
+    <p>
+      base64 编码的目的是把包含不可见字符的字符串转化为所有字符都可见的字符串。
+      base64 的字符集中共有 64 个字符，它们是英文大写、英文小写、数字加上"+"和"/"，
+      并用"="作为后缀。
+    </p>
+    <p>
+      我仿造 base64 写了一个 base16384，它的字符集中共有 16384 个字符（都是中文），
+      它们是 Unicode 中的 <code>0x4e00~0x8e00</code>（CJK 统一表意文字区），
+      并用中文逗号 <code>，</code>（<code>0xff0c</code>）做后缀。
+    </p>
+
+    <h2>原理</h2>
+    <p>
+      base64 每 3 个字节一组（24 bit），拆成 4 个 6 bit 的数，
+      每个映射到 64 个可见字符中的一个。base16384 反过来，每 7 个字节一组（56 bit），
+      拆成 4 个 14 bit 的数，每个映射到 16384 个 Unicode 中文字符中的一个。
+    </p>
+    <p>
+      编码效率上，base64 是 3 字节 → 4 字符（75%），
+      base16384 是 7 字节 → 4 字符，但每个中文字符占 3 字节（UTF-8），
+      所以其实是 7 字节 → 12 字节（58.3%），比 base64 低一些。
+      好处是：看起来全是中文，非常唬人。
+    </p>
+
+    <h2>编码器</h2>
+    <pre><code>{encoderCode}</code></pre>
+
+    <h2>解码器</h2>
+    <pre><code>{decoderCode}</code></pre>
+
+    <h2>用法</h2>
+    <p>编码：</p>
+    <pre><code>echo "Hello World" | python base16384.py</code></pre>
+    <p>解码：</p>
+    <pre><code>echo "（编码后的中文）" | python base16384_decode.py</code></pre>
+
+    <p style="margin-top:2rem;">
+      这个项目（2013 年写的）后来还被开源放在了
+      <a href="https://github.com/draplater/base16384" target="_blank">GitHub</a> 上。
+      过了几年，居然还真有人把这个 idea 用 C 语言实现了高性能版本，叫
+      <a href="https://github.com/fumiama/base16384" target="_blank">base16384（fumiama）</a>。
+    </p>
+  </div>
+
+  <div class="sticker block">
+    <AdSense slot="5678901234" format="rectangle" />
+  </div>
+
+</BaseLayout>

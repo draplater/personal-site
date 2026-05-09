@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+---
+
+<BaseLayout title="CSS Demo — Web Software Technology 2015">
+
+  <div class="article block">
+    <p style="color:#999;font-size:0.9rem;"><a href="/webtech/homework">← 作业列表</a> · Unit 3</p>
+    <h1>CSS 样式练习 (2016)</h1>
+
+    <style>
+      /* 当年用 CSS 写的一个简单但好看的样式 */
+      .css-demo .info-box {
+        background: #e8f4f8;
+        border-left: 4px solid #2aabff;
+        padding: 12px 16px;
+        margin: 10px 0;
+        border-radius: 0 4px 4px 0;
+      }
+      .css-demo .info-box h3 {
+        margin: 0 0 8px 0;
+        color: #2aabff;
+      }
+      .css-demo .card-grid {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin: 16px 0;
+      }
+      .css-demo .card-grid > div {
+        flex: 1;
+        min-width: 150px;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        text-align: center;
+      }
+      .css-demo .card-grid > div h4 {
+        margin: 0 0 8px 0;
+        font-size: 1.5rem;
+      }
+      @media (prefers-color-scheme: dark) {
+        .css-demo .info-box { background: #1e3a3f; }
+        .css-demo .card-grid > div { background: #2a2a2a; border-color: #444; }
+      }
+    </style>
+
+    <div class="css-demo">
+      <p>当年用 CSS 写的一些小效果（重新演绎版）：</p>
+
+      <div class="info-box">
+        <h3>📌 提示框</h3>
+        <p>This is an info box with a blue left border. 2015 CSS done right.</p>
+      </div>
+
+      <div class="card-grid">
+        <div><h4>🎨</h4><p>Color 1</p></div>
+        <div><h4>🖌️</h4><p>Color 2</p></div>
+        <div><h4>📐</h4><p>Layout</p></div>
+      </div>
+
+      <p>
+        完整的 CSS 样式表见<a href="https://github.com/draplater/personal-site/blob/main/src/layouts/BaseLayout.astro">当前站点源码</a>，
+        继承自当时的设计语言：<code>#eee</code> 灰底、白卡片、阴影浮起效果、<code>#2aabff</code> 链接蓝。
+      </p>
+    </div>
+  </div>
+
+</BaseLayout>
